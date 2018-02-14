@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="user">
+
+	<insert id="insertOfUser" parameterType="com.javaex.vo.UserVo">
+		<selectKey keyProperty="userNo" resultType="int" order="BEFORE">	
+			SELECT seq_users_no.nextval 
+			FROM dual
+		</selectKey>
+		<![CDATA[
+			INSERT INTO users
+			VALUES (#{userNo}, #{id}, #{userName}, #{password}, sysdate)
+		]]>
+	</insert>
+	
+	<select id="selectUserByIdPW" parameterType="map" resultType="com.javaex.vo.UserVo">
+		<![CDATA[
+			SELECT userNo, id, userName, password, joinDate
+			FROM users 
+			WHERE id = #{id, jdbcType=VARCHAR}
+			AND password = #{password, jdbcType=VARCHAR}
+		]]>
+	</select>
+	
+	<select id="selectUserByNo" parameterType="int" resultType="com.javaex.vo.UserVo">
+		<![CDATA[
+			SELECT userNo, id, userName, password, joinDate
+			FROM users 
+			WHERE userNo = #{userNo}
+		]]>
+	</select>
+	
+	<select id="selectUserById" parameterType="string" resultType="String">
+		<![CDATA[
+			SELECT id
+			FROM users 
+			WHERE id = #{id}
+		]]>
+	</select>
+	
+</mapper>
