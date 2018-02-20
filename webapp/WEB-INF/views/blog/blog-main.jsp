@@ -26,11 +26,10 @@
 					<p>
 				</div>
 				<ul class="blog-list">
-					<li><a href="">Spring Camp 2016 참여기</a> <span>2015/05/02</span>	</li>
-					<li><a href="">Spring Boot 사용법 정리</a> <span>2015/05/02</span>	</li>
-					<li><a href="">Spring Security 설정법</a> <span>2015/05/02</span>	</li>
-					<li><a href="">JPA + Hinernate</a> <span>2015/05/02</span>	</li>
-					<li><a href="">AOP 활용하기 - DAO 실행시간 측정하기</a> <span>2015/05/02</span>	</li>
+					<c:forEach items="${pList}" var="vo">
+					<li><a href="">${vo.postTitle}</a> <span>${vo.regDate}</span>	</li>
+						
+					</c:forEach>	
 				</ul>
 			</div>
 		</div>
@@ -40,14 +39,15 @@
 				<img src="${pageContext.request.contextPath}/jblogupload/${url}">
 			</div>
 		</div>
-
+		
 		<div id="navigation">
-			<h2>카테고리</h2>
+			<h2>카테고리 </h2>
 			<ul>
-				<li><a href="">닥치고 스프링</a></li>
-				<li><a href="">스프링 스터디</a></li>
-				<li><a href="">스프링 프로젝트</a></li>
-				<li><a href="">기타</a></li>
+			<c:forEach items="${cateList}" var="vo" >
+				<li><a href="">${vo.cateName}</a></li>
+			
+			</c:forEach>
+	
 			</ul>
 		</div>
 		
@@ -56,4 +56,144 @@
 		
 	</div>
 </body>
+<script type="text/javascript">
+	var id = ${authUser.id}
+	console.log(id);
+
+	function getList(userNo){
+		$.ajax({
+			url : "${pageContext.request.contextPath }/api/bmain",		
+			type : "post",
+			data : {
+						id : id
+					},
+	
+			dataType : "json",
+			success : function(cateMap){
+				console.log(cateMap);
+				for(var i=0; i<cateMap.categoryList.length;i++){
+					$("#catelist").append("<li data-no='"+cateMap.categoryList[i].cateNo+"'>"+cateMap.categoryList[i].cateName+"</li>");
+				}
+			},
+				error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+		}
+	});
+	
+		function fetchList(cateNo){
+			$.ajax({
+				url : "${pageContext.request.contextPath }/post/postlist",		
+				type : "post",
+				data : {
+							cateNo: cateNo
+						},
+			
+				dataType : "json",
+				success : function(pList){
+					$(".blog-list").empty();
+					if(pList.length == 0){
+						$(".blog-list").html("<li></li>");
+					} else {
+						for(var i=0; i<pList.length; i++){
+						$(".blog-list").prepend("<li data-no='"+pList[i].postNo+"'><strong>"+pList[i].postTitle+"</strong><span>"+pList[i].regDate+"</span></li>");
+							}
+						}
+				},
+				error : function(XHR, status, error) {
+					console.error(status + " : " + error);
+				}
+			});
+		};
+		
+		function fetchPost(postNo){
+			$.ajax({
+				url : "${pageContext.request.contextPath }/post/view",		
+				type : "post",
+				data : {
+							postNo:postNo
+						},
+			
+				dataType : "json",
+				success : function(postVo){
+					$(".blog-content").html(
+							"<h4>"+postVo.postTitle+"</h4>"
+						+   "<p>"+postVo.postContent+"</p>"
+							);
+					
+				},
+				error : function(XHR, status, error) {
+					console.error(status + " : " + error);
+				}
+			});
+		};
+		$("#catelist").on("click","li",function(){
+			var cateNo = $(this).data("no")
+			fetchList(cateNo);
+			
+			var postCount = postCountCk(cateNo);
+			if(postCount == 0){
+				defaultPost()
+			}else if(postCount != 0){
+				var postNo = recentPost(cateNo);
+				fetchPost(postNo)
+			}
+			
+		});
+		
+		$(".blog-list").on("click","li",function(){
+			var postNo = $(this).data("no");
+			fetchPost(postNo);
+		});
+		
+		function defaultPost(){
+			$(".blog-content").html(
+					"<h4>등록된 글이 없습니다.</h4>"
+				+   "<p> </p>"
+					);
+		}
+		
+		function postCountCk(cateNo){
+			var postCt = 0;
+			$.ajax({	
+				url : "${pageContext.request.contextPath }/api/postCount",
+				async : false,
+				type : "post",
+				data : {
+							cateNo: cateNo
+						},
+			
+				dataType : "json",
+				success : function(post){
+					postCt = post;
+					
+				},
+				error : function(XHR, status, error) {
+					console.error(status + " : " + error);
+				}
+			});
+			return(postCt);
+	}
+		function recentPost(cateNo){
+			var postNo = 0; 
+			$.ajax({
+				url : "${pageContext.request.contextPath }/post/recentpost",
+				async : false,
+				type : "post",
+				data : {
+							cateNo: cateNo
+						},
+			
+				dataType : "json",
+				success : function(postNum){
+					postNo = postNum;
+					
+				},
+				error : function(XHR, status, error) {
+					console.error(status + " : " + error);
+				}
+			});
+			return(postNo);
+		}
+}
+</script>
 </html>

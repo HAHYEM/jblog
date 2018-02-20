@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.javaex.dao.CategoryDao;
+import com.javaex.dao.UserDao;
 import com.javaex.vo.CategoryVo;
 import com.javaex.vo.UserVo;
 
@@ -16,6 +17,9 @@ public class CategoryService {
 
 	@Autowired
 	private CategoryDao categoryDao;
+	
+	@Autowired
+	private UserDao userDao;
 	
 	public void makeCategory(UserVo userVo) {
 		int userNo = userVo.getUserNo();
@@ -50,4 +54,24 @@ public class CategoryService {
 		
 		return result;
 	}
+
+	public Map<String, Object> blogMain(String id, String cateName) {
+		UserVo userVo = userDao.selectUser(id);
+		int userNo = userVo.getUserNo();
+		
+		Map<String, Object> bMap = new HashMap<>();
+		bMap.put("userNo", userNo);
+		bMap.put("cateName", cateName);
+		
+		int cateNo = categoryDao.getCateNo(bMap);
+		
+		List<CategoryVo> cateList = categoryDao.getCateList(userNo);
+		
+		Map<String, Object> cateMap = new HashMap<>();
+		cateMap.put("cateNo", cateNo);
+		cateMap.put("cateList", cateList);
+	
+		return cateMap;
+	}
+
 }

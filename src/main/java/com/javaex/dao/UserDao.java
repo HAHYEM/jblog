@@ -42,5 +42,16 @@ public class UserDao {
 	public String selectUrlById(String id) {
 		return sqlSession.selectOne("user.selectUrlById",id);
 	}
+
+	public UserVo selectUser(String id) {
+		UserVo userInfo = sqlSession.selectOne("user.selectOneById", id);
+		return userInfo;
+	}
+
+	public int getUserNo(String id) {
+		int result = sqlSession.selectOne("user.selectUserNoById", id);	
+		System.out.println("UserNo: " + result);
+		return result;
+	}
 	
 }

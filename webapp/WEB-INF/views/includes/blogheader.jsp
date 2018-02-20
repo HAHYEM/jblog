@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 		<div id="header">
-			<h1>블로그타이틀 출력해야함</h1>
+			<h1>${blogVo.blogTitle}</h1>
 			<ul>
 				<c:choose>
 				<c:when test="${authUser == null}">

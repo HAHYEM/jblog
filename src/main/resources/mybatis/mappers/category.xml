@@ -32,13 +32,19 @@
 	
 	<select id="selectCategoryByUserNo" parameterType="int" resultType="com.javaex.vo.CategoryVo">
 		<![CDATA[
-			SELECT cateNo
-				 , userNo
-				 , cateName
-				 , description
-				 , regDate
-			FROM category
-			WHERE userNo = #{userNo}
+			SELECT C.cateNo
+				 , C.userNo
+				 , C.cateName
+				 , C.description
+				 , C.regDate
+                 , NVL(P.postCount,0) postCount
+			FROM category C,
+			    (SELECT  cateNo,count(*) postCount
+			     FROM post
+			     GROUP BY cateNo
+			     ) P
+			WHERE C.cateNo = P.cateNo (+)
+			AND userNo = #{userNo}
 			ORDER BY cateNo desc
 		]]>
 	</select>
@@ -69,4 +75,13 @@
 			WHERE cateNo = #{cateNo}
 		]]>
 	</delete>
+	
+	<select id ="getCategoryNoByMap" resultType ="int" parameterType="map">
+		<![CDATA[
+			SELECT cateNo
+			FROM category
+			WHERE cateName = #{cateName}
+			AND	  userNo = #{userNo}
+		]]>
+	</select>
 </mapper>

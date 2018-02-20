@@ -23,6 +23,7 @@ public class CategoryDao {
 
 	public List<CategoryVo> selectCateList(int userNo){
 		List<CategoryVo> cateList = sqlSession.selectList("category.selectCategoryByUserNo", userNo);
+		System.out.println(cateList);
 		return cateList;
 	}
 	
@@ -46,5 +47,10 @@ public class CategoryDao {
 	public List<CategoryVo> getCateList(int userNo) {
 		List<CategoryVo> cList = sqlSession.selectList("category.getCategoryWriteListByUserNo", userNo);
 		return cList;
-	}	
+	}
+	
+	public int getCateNo(Map<String, Object> cateNoMap) {
+		int cateNo = sqlSession.selectOne("category.getCategoryNoByMap", cateNoMap);
+		return cateNo;
+	}
 }

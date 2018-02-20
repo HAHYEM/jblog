@@ -116,4 +116,8 @@ public class BlogService {
 		List<CategoryVo> cList = categoryDao.getCateList(userNo);
 		return cList;
 	}
+
+	public BlogVo getBlogVo(int userNo) {
+		return blogDao.selectOneBlog(userNo);
+	}
 }

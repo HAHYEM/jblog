@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.javaex.service.BlogService;
+import com.javaex.service.CategoryService;
+import com.javaex.service.PostService;
+import com.javaex.service.UserService;
+import com.javaex.vo.BlogVo;
 import com.javaex.vo.CategoryVo;
+import com.javaex.vo.PostVo;
 import com.javaex.vo.UserVo;
 
 @Controller
@@ -23,6 +28,15 @@ public class BlogController {
 	@Autowired
 	private BlogService blogService;
 	
+	@Autowired
+	private PostService postService;
+
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private CategoryService categoryService;
+	
 	@RequestMapping(value="")
 	public String userBlog(@PathVariable("id") String id
 						 , HttpSession session
@@ -31,11 +45,28 @@ public class BlogController {
 		String url = blogService.getUrl(id);
 		model.addAttribute("url",url);
 		System.out.println("main: " + url);
+		
+		int userNo = userService.getUserNo(id);
+		System.out.println("userNo: "+userNo);
+		
+		BlogVo bVo = blogService.getBlogVo(userNo);
+		List<CategoryVo> cateList = categoryService.getCateList(userNo);
+		List<PostVo> pList = postService.getPostList(userNo);
+		System.out.println(pList);
+		
+		model.addAttribute("blogVo", bVo);
+		model.addAttribute("cateList", cateList);
+		model.addAttribute("pList", pList);
 		return "blog/blog-main";
 	}
 	
 	@RequestMapping("/admin")
-	public String admin(@PathVariable("id") String id){
+	public String admin(@PathVariable("id") String id
+					  , Model model){
+		int userNo = userService.getUserNo(id);
+		BlogVo bVo = blogService.getBlogVo(userNo);
+		
+		model.addAttribute("blogVo", bVo);
 		return "redirect:/{id}/admin/basic";
 	}
 	
@@ -44,6 +75,11 @@ public class BlogController {
 								, Model model
 								, HttpSession session) {
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
+
+		int userNo = userService.getUserNo(loginId);
+		BlogVo bVo = blogService.getBlogVo(userNo);
+
+		model.addAttribute("blogVo", bVo);
 
 		if(authUser.getId().equals(loginId)) {
 			
@@ -71,12 +107,17 @@ public class BlogController {
 	}
 	
 	@RequestMapping(value = "/admin/cate")
-	public String adminCate(@PathVariable("id") String loginId, 
-			HttpSession session
+	public String adminCate(@PathVariable("id") String id, 
+			HttpSession session,
+			Model model
 			) {
+		int no = userService.getUserNo(id);
+		BlogVo bVo = blogService.getBlogVo(no);
+
+		model.addAttribute("blogVo", bVo);
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 
-		if(authUser.getId().equals(loginId)) {
+		if(authUser.getId().equals(id)) {
 
 			return "blog/admin/blog-admin-cate";
 		}else {
@@ -85,13 +126,34 @@ public class BlogController {
 	}
 	
 	@RequestMapping("/admin/write")
-	public String wirteForm(Model model, HttpSession session){
+	public String wirteForm(@PathVariable("id") String id, Model model, HttpSession session){
+
+		int no = userService.getUserNo(id);
+		BlogVo bVo = blogService.getBlogVo(no);
+
+		model.addAttribute("blogVo", bVo);
+		
 		UserVo userVo = (UserVo) session.getAttribute("authUser");
 		int userNo = userVo.getUserNo();
 		
 		List<CategoryVo> cList = blogService.getCateList(userNo);
 		model.addAttribute("categoryList", cList);
-		System.out.println(cList);
+		System.out.println(cList.get(0).toString());
 		return "blog/admin/blog-admin-write";
+	}
+	
+	@RequestMapping("/admin/post")
+	public String wirte(@PathVariable("id") String id
+						, Model model
+						, HttpSession session
+						, @RequestParam("title") String title
+						, @RequestParam("content") String content
+						, @RequestParam("category") int cateNo){
+		int no = userService.getUserNo(id);
+		BlogVo bVo = blogService.getBlogVo(no);
+
+		model.addAttribute("blogVo", bVo);
+		postService.writePost(title, content, cateNo);
+		return "redirect:/{id}/admin/write";
 	}
 }

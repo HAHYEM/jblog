@@ -45,4 +45,9 @@ public class UserService {
 		return result;
 	}
 
+	public int getUserNo(String id) {
+		return userDao.getUserNo(id);
+		
+	}
+
 }

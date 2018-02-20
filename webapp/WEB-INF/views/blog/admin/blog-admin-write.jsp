@@ -22,15 +22,16 @@
 				<!--/navigation -->	
 				
 				
-				<form action="" method="post">
+				<form action="${pageContext.request.contextPath }/${authUser.id}/admin/post" method="post">
 			      	<table class="admin-cat-write">
 			      		<tr>
 			      			<td class="t">제목</td>
 			      			<td>
 			      				<input type="text" size="60" name="title">
-				      			<select name="category">
-				      				<option>미분류</option>
-				      				<option>자바</option>
+				      			<select name="category">		<!--controller를 통해서 리스트 받아오기  -->
+				      				<c:forEach items="${categoryList}" var="clist">
+					      				<option value ="${clist.cateNo }">${clist.cateName }</option>
+					      			</c:forEach>
 				      			</select>
 				      		</td>
 			      		</tr>
@@ -47,13 +48,8 @@
 			</div>
 		</div>
 		
-		<!-- 푸터 -->
-		<div id="footer">
-			<p>
-				<strong>Spring 이야기</strong> is powered by JBlog (c)2018
-			</p>
-		</div>
-		<!-- 푸터 -->
+		<!-- footer -->
+		<c:import url="/WEB-INF/views/includes/blogfooter.jsp"></c:import>
 		
 	</div>
 </body>

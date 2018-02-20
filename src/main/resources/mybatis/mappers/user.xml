@@ -48,4 +48,22 @@
 	]]>
 	</select>
 	
+	<select id="selectOneById" parameterType = "string" resultType="com.javaex.vo.UserVo">
+	<![CDATA[
+			SELECT userNo
+			     , id
+			     , userName
+			FROM users
+			WHERE id = #{id}
+		]]>
+	</select>
+	
+	<select id="selectUserNoById" parameterType = "string" resultType="int">
+	<![CDATA[
+			SELECT userNo
+			FROM users
+			WHERE id = #{id}
+		]]>
+	</select>
+	
 </mapper>

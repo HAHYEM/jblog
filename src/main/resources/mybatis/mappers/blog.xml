@@ -6,7 +6,7 @@
  	<insert id="insertOfBlog" parameterType="com.javaex.vo.BlogVo">
 		<![CDATA[
 			INSERT INTO blog
-			VALUES (#{userVo.userNo}, #{userVo.id}||'님의 블로그', 'spring-logo.jsp')
+			VALUES (#{userVo.userNo}, #{userVo.id}||'님의 블로그', 'spring-logo.jpg')
 		]]>
 	</insert>
 	
@@ -34,4 +34,5 @@
 		]]>
 	</insert>
 	
+
 </mapper>

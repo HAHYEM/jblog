@@ -96,7 +96,7 @@
 			//받을 때 데이터 타입
 			dataType : "json",
 			success : function(categoryVo){
-				render(categoryVo, "down");
+				render(categoryVo, "after");
 				$("input[name='name']").val("");
 				$("input[name='desc']").val("");
 			},
@@ -125,7 +125,9 @@
 				$("#cateListArea").prepend(str);
 			} else if (updown == "down") {
 				$("#cateListArea").append(str);
-			} else {
+			} else if (updown == "after") {
+				$("#plusCateListArea").after(str);
+			}else {
 				console.log("updown 오류");
 			}
 		};

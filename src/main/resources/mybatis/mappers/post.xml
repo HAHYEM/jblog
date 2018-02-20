@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="post">
+
+	<insert id="writePostByMap" parameterType="map">
+		<![CDATA[
+			INSERT INTO post
+			VALUES(seq_post_no.nextval
+				 , #{cateNo}
+				 , #{title}
+				 , #{content}
+				 , sysdate)
+		]]>
+	</insert>
+	
+	<select id="writeCatePostListByCateNo" parameterType="int" resultType="com.javaex.vo.PostVo">
+		<![CDATA[
+			SELECT postNo
+				 , cateNo
+				 , postTitle
+				 , postContent
+				 , regDate
+			FROM post
+			WHERE cateNo = #{cateNo}
+		]]>
+	</select>
+	
+	<select id = "selectPostCountByPostNo" parameterType ="int" resultType ="com.javaex.vo.PostVo">
+		<![CDATA[
+			SELECT postNo
+				 , postTitle
+				 , postContent
+				 , regDate
+			FROM post
+			WHERE postNo = #{postNo}
+		]]>
+	</select>
+<!-- 	
+	<select id="selectPostCountByCateNo" parameterType="int" resultType="int">
+		<![CDATA[
+				SELECT COUNT(*)
+				FROM post
+				WHERE cateNo = #{cateNo}
+		]]>
+	</select>
+ -->	
+ 	
+ 	<select id="getRecentPostByCateNo" parameterType="int" resultType="int">
+		<![CDATA[
+				SELECT postNo
+				FROM post p
+				   , ( SELECT regDate
+				       FROM post
+				       WHERE cateNo = #{cateNo}
+				     ) m
+				WHERE p.regDate = m.regDate
+		]]>
+	
+	</select>
+	
+	<select id = "getPostListByUserNo" parameterType ="int" resultType ="com.javaex.vo.PostVo">
+		<![CDATA[
+			SELECT P.postNo, P.postTitle, P.postContent, TO_CHAR(P.regDate, 'YYYY/MM/DD') regDate, C.cateNo
+			FROM post P, category C
+			WHERE P.cateNo = C.cateNo
+			AND userNo = #{userNo}
+		]]>
+	</select>
+</mapper>
