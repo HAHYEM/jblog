@@ -17,11 +17,9 @@
 		
 		<div id="wrapper">
 			<div id="content" class="full-screen">
-				<ul class="admin-menu">
-					<li><a href="">기본설정</a></li>
-					<li><a href="">카테고리</a></li>
-					<li class="selected"><a href="">글작성</a></li>
-				</ul>
+				<!--navigation -->	
+					<c:import url="/WEB-INF/views/includes/blognav.jsp"></c:import>
+				<!--/navigation -->	
 				
 				
 				<form action="" method="post">

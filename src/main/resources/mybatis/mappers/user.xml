@@ -10,7 +10,7 @@
 		</selectKey>
 		<![CDATA[
 			INSERT INTO users
-			VALUES (#{userNo}, #{id}, #{userName}, #{password}, sysdate)
+			VALUES (#{userNo, jdbcType=INTEGER}, #{id, jdbcType=VARCHAR}, #{userName, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, sysdate)
 		]]>
 	</insert>
 	
@@ -31,12 +31,21 @@
 		]]>
 	</select>
 	
-	<select id="selectUserById" parameterType="string" resultType="String">
+	<select id="selectUserID" parameterType="String" resultType="String">
 		<![CDATA[
-			SELECT id
-			FROM users 
-			WHERE id = #{id}
+			select id
+			from users
+			where id = #{id}
 		]]>
+	</select>
+	
+	<select id="selectUrlById" parameterType = "string" resultType="string">
+	<![CDATA[
+		SELECT logoFile
+		FROM users U, blog B
+		WHERE id = #{id} 
+		AND U.userNo = B.userNo
+	]]>
 	</select>
 	
 </mapper>

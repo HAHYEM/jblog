@@ -6,11 +6,11 @@
  	<insert id="insertOfBlog" parameterType="com.javaex.vo.BlogVo">
 		<![CDATA[
 			INSERT INTO blog
-			VALUES (#{userNo}, #{userVo.id}||'님의 블로그', 'spring-logo.jsp')
+			VALUES (#{userVo.userNo}, #{userVo.id}||'님의 블로그', 'spring-logo.jsp')
 		]]>
 	</insert>
 	
-	<select id="selectOneByUserNo" resultType="int">
+	<select id="selectOneByUserNo" parameterType = "int" resultType = "com.javaex.vo.BlogVo">
 		<![CDATA[
 			SELECT userNo, blogTitle, logoFile
 			FROM blog

@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.12.4.js"></script>
 <title>JBlog</title>
 <link rel="stylesheet" href="/jblog/assets/css/jblog.css">
 </head>
@@ -17,41 +18,18 @@
 		
 		<div id="wrapper">
 			<div id="content" class="full-screen">
-				<ul class="admin-menu">
-					<li><a href="">기본설정</a></li>
-					<li class="selected"><a href="">카테고리</a></li>
-					<li><a href="">글작성</a></li>
-				</ul>
+				<!--navigation -->	
+					<c:import url="/WEB-INF/views/includes/blognav.jsp"></c:import>
+				<!--/navigation -->	
 				
-		      	<table class="admin-cat">
-		      		<tr>
+		      	<table class="admin-cat" id="cateListArea">
+		      		<tr id="plusCateListArea">
 		      			<th>번호</th>
 		      			<th>카테고리명</th>
 		      			<th>포스트 수</th>
 		      			<th>설명</th>
 		      			<th>삭제</th>      			
 		      		</tr>
-					<tr>
-						<td>3</td>
-						<td>미분류</td>
-						<td>10</td>
-						<td>카테고리를 지정하지 않은 경우</td>
-						<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
-					</tr>  
-					<tr>
-						<td>2</td>
-						<td>스프링 스터디</td>
-						<td>20</td>
-						<td>어쩌구 저쩌구</td>
-						<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>스프링 프로젝트</td>
-						<td>15</td>
-						<td>어쩌구 저쩌구</td>
-						<td><img src="${pageContext.request.contextPath}/assets/images/delete.jpg"></td>
-					</tr>					  
 				</table>
       	
       			<h4 class="n-c">새로운 카테고리 추가</h4>
@@ -66,20 +44,118 @@
 		      		</tr>
 		      		<tr>
 		      			<td class="s">&nbsp;</td>
-		      			<td><input type="submit" value="카테고리 추가"></td>
+		      			<td><input type="submit" id="btnPlus" value="카테고리 추가"></td>
 		      		</tr>      		      		
 		      	</table> 
 			</div>
 		</div>
 
-		<!-- 푸터 -->
-		<div id="footer">
-			<p>
-				<strong>Spring 이야기</strong> is powered by JBlog (c)2018
-			</p>
-		</div>
-		<!-- 푸터 -->
+		<!-- footer -->
+		<c:import url="/WEB-INF/views/includes/blogfooter.jsp"></c:import>
 		
 	</div>
 </body>
+<script type="text/javascript">
+	var userNo = ${authUser.userNo}
+	console.log(userNo);
+	getList(userNo);
+
+	function getList(userNo){
+		$.ajax({
+			url : "${pageContext.request.contextPath }/api/getcate",		
+			type : "post",
+			data : {userNo: userNo},
+	
+			dataType : "json",
+			success : function(cateList){
+				console.log(cateList);
+				for(var i=0; i<cateList.length;i++){
+				render(cateList[i],"down");
+				}
+			},
+				error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+		}
+	});
+}
+	
+	$("#btnPlus").on("click", function(){
+		var categoryVo = {
+				userNo : userNo,
+				cateName : $("input[name = 'name']").val(),
+				description : $("input[name = 'desc']").val()
+		}
+		
+		$.ajax({
+			//보낼 때 데이터 타입
+			url : "${pageContext.request.contextPath }/api/addcate",		
+			type : "post",
+			contentType : "application/json",
+			data : JSON.stringify(categoryVo),
+			
+			//받을 때 데이터 타입
+			dataType : "json",
+			success : function(categoryVo){
+				render(categoryVo, "down");
+				$("input[name='name']").val("");
+				$("input[name='desc']").val("");
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+		});
+		$("[name=name]").val("");
+		$("[name=desc]").val("");	
+	}); 
+	
+
+
+		function render(categoryVo, updown) {
+
+			var str = "";
+			str += "<tr id = 'ctgr"+categoryVo.cateNo+"'>"
+			str += "	<td class = 'cateNo'>"+categoryVo.cateNo+"</td>"
+			str += "	<td>" + categoryVo.cateName + "</td>";
+			str += "	<td>" + categoryVo.postCount + "</td>";
+			str += "	<td>" + categoryVo.description + "</td>";
+			str += "	<td><img class='btnCateDel' data-no='"+categoryVo.cateNo+"' src='${pageContext.request.contextPath}/assets/images/delete.jpg'></td>";
+			str += "</tr>";
+
+			if (updown == "up") {
+				$("#cateListArea").prepend(str);
+			} else if (updown == "down") {
+				$("#cateListArea").append(str);
+			} else {
+				console.log("updown 오류");
+			}
+		};
+		
+		$("#cateListArea").on("click", ".btnCateDel", function(){
+			var cateNo = $(this).data("no")
+			console.log(cateNo);
+ 			$.ajax({
+				//보낼 때 데이터 타입
+				url : "${pageContext.request.contextPath }/api/deletecate",		
+				type : "post",
+				data : {
+					cateNo : cateNo
+					},
+				
+				//받을 때 데이터 타입
+				dataType : "json",
+				success : function(result){
+					if(result){
+						console.log("제거했음");
+						$("#ctgr"+cateNo).remove();
+					}else{
+						console.log("제거실패")
+							}
+				},
+				error : function(XHR, status, error) {
+					console.error(status + " : " + error);
+				}
+			}); 
+		}); 
+
+</script>
 </html>

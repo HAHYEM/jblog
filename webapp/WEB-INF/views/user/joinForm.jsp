@@ -23,7 +23,6 @@
 			<label class="block-label" for="id">아이디</label>
 			<input type="text" name="id"  value="" />
 			<input id="btn-checkid" type="button" value="id 중복체크">
-			<div id="checkMessage"></div>
 			<img id="img-checkid" style="display: none;" src="${pageContext.request.contextPath}/assets/images/check.png">
 			<p class="form-error">
 			</p>
@@ -44,41 +43,30 @@
 
 </body>
 <script type="text/javascript">
-	$("#btn-checkid").on("click",function(){
-		id = $("[name=id]").val();
-		/* 
-		var userVo = {
-				id : id
-		}
-		 */
- 		$.ajax({
-			//보낼 때 데이터 타입
-			url : "${pageContext.request.contextPath }/user/api/idCheck",		
+	$("#btn-checkid").on("click", function() {
+		
+		var id = $("[name=id]").val();
+		$.ajax({
+			url : "${pageContext.request.contextPath}/users/api/idCheck",		
 			type : "post",
-		/* 	contentType : "application/json",
-			data : JSON.stringify(userVo),
-			 */
 			data : {
-				 id : id
-			},
+				id : id
+				}, //여기까지가 데이터를 보낼때
 			
-			//받을 때 데이터 타입
-			dataType : "json",
-			success : function(result){
-				console.log(result);
-				if(result == true){
-					$("#checkMessage").text("사용할 수 있는 이메일입니다.")
-					$("#checkMessage").css("color", "blue");
-				}else{
-					$("#checkMessage").text("사용중인 이메일입니다.")
-					$("#checkMessage").css("color", "red");
+			dataType : "json", //여기부터는 데이터를 받을때
+			success : function(result) {
+				
+				if(result == true) {
+					$(".form-error").html("<font color = blue>사용하실 수 있는 아이디입니다</font>");
+				} else {
+					$(".form-error").html("<font color = red>사용하실 수 없는 아이디입니다</font>");
 				}
 			},
 			error : function(XHR, status, error) {
 				console.error(status + " : " + error);
 			}
-		}); 
+		});
 	});
-
 </script>
+
 </html>

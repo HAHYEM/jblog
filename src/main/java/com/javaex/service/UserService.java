@@ -1,15 +1,11 @@
 package com.javaex.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.javaex.dao.BlogDao;
+import com.javaex.dao.CategoryDao;
 import com.javaex.dao.UserDao;
-import com.javaex.vo.BlogVo;
 import com.javaex.vo.UserVo;
 @Service
 public class UserService {
@@ -20,9 +16,13 @@ public class UserService {
 	@Autowired
 	private BlogDao blogDao;
 	
+	@Autowired
+	private CategoryService categoryService;
+	
 	public void join(UserVo userVo) {
 		userDao.insert(userVo);
 		blogDao.insert(userVo);
+		categoryService.makeCategory(userVo);
 	}
 
 	public UserVo login(String id, String password) {
@@ -34,12 +34,13 @@ public class UserService {
 	}
 		
 	public boolean idCheck(String id) {
+		
 		boolean result;
-		UserVo userVo = userDao.getUser(id);
-		if(userVo != null) {
+		String getId = userDao.getUser(id);
+		if(getId != null) {
 			result = false;
-		}else {
-			result = true;
+		} else {
+			result= true;
 		}
 		return result;
 	}

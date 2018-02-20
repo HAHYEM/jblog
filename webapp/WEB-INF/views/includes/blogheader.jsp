@@ -13,7 +13,7 @@
 				<c:otherwise>
 					<!-- 로그인 후 메뉴 -->
 					<li><a href="${pageContext.request.contextPath }/user/logout">로그아웃</a></li>
-					<li><a href="${pageContext.request.contextPath }/${authUser.id}/admin/basic">내블로그 관리</a></li>
+					<li><a href="${pageContext.request.contextPath }/${sessionScope.authUser.id}/admin/basic">내블로그 관리</a></li>
 				</c:otherwise>
 				</c:choose>
 			</ul>

@@ -12,6 +12,7 @@ import com.javaex.vo.UserVo;
 public class UserDao {
 	@Autowired
 	private SqlSession sqlSession;	
+	
 	public int insert(UserVo userVo) {
 		int result = sqlSession.insert("user.insertOfUser",userVo);
 		System.out.println(result+"insert");
@@ -19,11 +20,13 @@ public class UserDao {
 	}
 
 	public UserVo inGetUser(String id, String password) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("id", id);
 		map.put("password", password);
 		System.out.println("login");
-		return sqlSession.selectOne("user.selectUserByIdPW", map);
+		UserVo userVo = sqlSession.selectOne("user.selectUserByIdPW", map);
+		System.out.println(userVo);
+		return userVo;
 	}
 	
 	public UserVo outGetUser(int no) {
@@ -31,9 +34,13 @@ public class UserDao {
 		return userVo;
 	}
 
-	public UserVo getUser(String id) {
-		UserVo userVo = sqlSession.selectOne("user.selectUserById", id);
-		return userVo;
+	public String getUser(String id) {
+		String getId = sqlSession.selectOne("user.selectUserID", id); //변수값 같으면 안됨
+		return getId;		
 	}
-
+	
+	public String selectUrlById(String id) {
+		return sqlSession.selectOne("user.selectUrlById",id);
+	}
+	
 }

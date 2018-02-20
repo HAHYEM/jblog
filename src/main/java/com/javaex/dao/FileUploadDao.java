@@ -14,5 +14,4 @@ public class FileUploadDao {
 	public int insertFile(FileUploadVo fileUploadVo) {
 		return sqlSession.insert("fileupload.insertFileUpload", fileUploadVo);
 	}
-
 }

@@ -6,7 +6,7 @@
 	<insert id="insertFileUpload" parameterType="com.javaex.vo.FileUploadVo">
 		<![CDATA[
 			INSERT INTO fileupload
-			VALUES(seq_fileupload_no.nextval, #{orgName}, #{saveName}, #{filePath}, #{fileSize})
+			VALUES(seq_fileupload_no.nextval, #{orgName}, #{saveName}, #{exName}, #{filePath}, #{fileSize})
 		]]>
 	</insert>
 </mapper>

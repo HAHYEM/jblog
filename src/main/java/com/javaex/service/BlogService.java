@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.javaex.dao.BlogDao;
+import com.javaex.dao.CategoryDao;
 import com.javaex.dao.FileUploadDao;
+import com.javaex.dao.UserDao;
 import com.javaex.vo.BlogVo;
+import com.javaex.vo.CategoryVo;
 import com.javaex.vo.FileUploadVo;
 import com.javaex.vo.UserVo;
 
@@ -25,17 +29,31 @@ public class BlogService {
 	@Autowired
 	private FileUploadDao fileUploadDao;
 	
+	@Autowired
+	private UserDao userDao;
+	
+	@Autowired
+	private CategoryDao categoryDao;
+	
 	public BlogVo blogSelect(UserVo userVo) {
 		int userNo = userVo.getUserNo();
 		BlogVo blogVo = blogDao.selectOneBlog(userNo);
 		return blogVo;
 	}
+	
+	public String getUrl(String id) {
+		
+		return userDao.selectUrlById(id);
+	}
 
 	public BlogVo blogUpdate(String title, int userNo, MultipartFile file) {
 		String logoFile = "";
 		
-		BlogVo blogVo = new BlogVo();
+		FileUploadVo vo = fileUpload(file);
+		logoFile = vo.getSaveName();
+		System.out.println(logoFile);
 		
+		BlogVo blogVo = new BlogVo();
 		blogVo.setBlogTitle(title);
 		blogVo.setUserNo(userNo);
 		blogVo.setLogoFile(logoFile);
@@ -47,7 +65,7 @@ public class BlogService {
 	}
 	
 	public FileUploadVo fileUpload(MultipartFile file) {
-		String saveDir = "D:\\javaStudy\\jblogupload";
+		String saveDir = "D:\\javaStudy\\workspace\\jblog\\jblogupload";
 		
 		FileUploadVo fileUploadVo = new FileUploadVo();
 
@@ -93,5 +111,9 @@ public class BlogService {
 		}
 		return fileUploadVo;
 	}
-	
+
+	public List<CategoryVo> getCateList(int userNo) {
+		List<CategoryVo> cList = categoryDao.getCateList(userNo);
+		return cList;
+	}
 }
