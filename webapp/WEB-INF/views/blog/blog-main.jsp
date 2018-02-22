@@ -47,7 +47,7 @@
 			<h2>카테고리 </h2>
 			<ul class="blog-category">
 			<c:forEach items="${cateList}" var="vo" >
-				<li data-no="${vo.cateNo}">${vo.cateName}</li>
+				<li data-no="${vo.cateNo}" style="cursor:pointer;">${vo.cateName}</li>
 			</c:forEach>
 			</ul>	
 		</div>
@@ -105,7 +105,7 @@
 				console.log(pList);
 				for(var i=0; i<pList.length; i++){
 				$(".blog-list").append(
-				 "<li data-no='"+pList[i].postNo+"'>'"+pList[i].postTitle+"'<span>'"+pList[i].regDate+"'</span></li>"
+				 "<li style='cursor:pointer;' data-no='"+pList[i].postNo+"'>'"+pList[i].postTitle+"'<span>'"+pList[i].regDate+"'</span></li>"
 										);
 				}
 			},
