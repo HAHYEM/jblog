@@ -105,7 +105,7 @@
 				console.log(pList);
 				for(var i=0; i<pList.length; i++){
 				$(".blog-list").append(
-				 "<li style='cursor:pointer;' data-no='"+pList[i].postNo+"'>'"+pList[i].postTitle+"'<span>'"+pList[i].regDate+"'</span></li>"
+				 "<li style='cursor:pointer;' data-no='"+pList[i].postNo+"'>"+pList[i].postTitle+"<span>"+pList[i].regDate+"</span></li>"
 										);
 				}
 			},
