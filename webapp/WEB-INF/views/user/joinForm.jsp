@@ -24,7 +24,7 @@
 			<input type="text" name="id"  value="" />
 			<input id="btn-checkid" type="button" value="id 중복체크">
 			<img id="img-checkid" style="display: none;" src="${pageContext.request.contextPath}/assets/images/check.png">
-			<p class="form-error">
+			<p class="error-checkid">
 			</p>
 
 			<label class="block-label" for="password">패스워드</label>
@@ -44,10 +44,10 @@
 </body>
 <script type="text/javascript">
 	$("#btn-checkid").on("click", function() {
+		var id = $("input[name='id']").val(); //입력한 ID를 받아오는 작업
 		
-		var id = $("[name=id]").val();
 		$.ajax({
-			url : "${pageContext.request.contextPath}/users/api/idCheck",		
+			url : "${pageContext.request.contextPath}/user/idCheck",		
 			type : "post",
 			data : {
 				id : id
@@ -55,11 +55,11 @@
 			
 			dataType : "json", //여기부터는 데이터를 받을때
 			success : function(result) {
-				
-				if(result == true) {
-					$(".form-error").html("<font color = blue>사용하실 수 있는 아이디입니다</font>");
+				console.log(result);
+				if(result) {
+					$(".error-checkid").html("<font color = blue>사용하실 수 있는 아이디입니다</font>");
 				} else {
-					$(".form-error").html("<font color = red>사용하실 수 없는 아이디입니다</font>");
+					$(".error-checkid").html("<font color = red>사용하실 수 없는 아이디입니다</font>");
 				}
 			},
 			error : function(XHR, status, error) {

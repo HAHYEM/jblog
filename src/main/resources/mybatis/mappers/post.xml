@@ -61,10 +61,21 @@
 	
 	<select id = "getPostListByUserNo" parameterType ="int" resultType ="com.javaex.vo.PostVo">
 		<![CDATA[
-			SELECT P.postNo, P.postTitle, P.postContent, TO_CHAR(P.regDate, 'YYYY/MM/DD') regDate, C.cateNo
+			SELECT P.postNo, P.postTitle, P.postContent, P.regDate, C.cateNo
 			FROM post P, category C
 			WHERE P.cateNo = C.cateNo
 			AND userNo = #{userNo}
+			ORDER BY regDate desc
+		]]>
+	</select>
+	
+	<select id = "postViewCateByCateNo" parameterType ="int" resultType ="com.javaex.vo.PostVo">
+		<![CDATA[
+			SELECT P.postNo, P.postTitle, P.postContent, P.regDate, C.cateNo
+			FROM post P, category C
+			WHERE P.cateNo = C.cateNo
+			AND C.cateNo = #{cateNo}
+			ORDER BY regDate desc
 		]]>
 	</select>
 </mapper>

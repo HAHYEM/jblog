@@ -33,11 +33,6 @@ public class UserDao {
 		UserVo userVo = sqlSession.selectOne("user.selectUserByNo", no);
 		return userVo;
 	}
-
-	public String getUser(String id) {
-		String getId = sqlSession.selectOne("user.selectUserID", id); //변수값 같으면 안됨
-		return getId;		
-	}
 	
 	public String selectUrlById(String id) {
 		return sqlSession.selectOne("user.selectUrlById",id);

@@ -37,6 +37,12 @@ public class CategoryDao {
 		return cateVo;
 	}
 
+	public CategoryVo selectCategoryByCateNo(int cateNo) {
+		CategoryVo cateVo = sqlSession.selectOne("category.selectCategoryByCateNo", cateNo);
+		return cateVo;
+	}
+	
+	
 	public int deleteCategory(int cateNo){
 		int result = sqlSession.delete("category.deleteCategoryByCateNo", cateNo);
 		System.out.println(result + "건 삭제");
@@ -52,5 +58,10 @@ public class CategoryDao {
 	public int getCateNo(Map<String, Object> cateNoMap) {
 		int cateNo = sqlSession.selectOne("category.getCategoryNoByMap", cateNoMap);
 		return cateNo;
+	}
+
+	public CategoryVo viewCate(int cateNo) {
+		CategoryVo cateVo = sqlSession.selectOne("category.getViewCateByCateNo", cateNo);
+		return cateVo;
 	}
 }

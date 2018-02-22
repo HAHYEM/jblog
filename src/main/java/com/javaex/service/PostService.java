@@ -49,4 +49,9 @@ public class PostService {
 		List<PostVo> pList = postDao.getPostList(userNo);
 		return pList;
 	}
+	
+	public List<PostVo> postViewCate(int cateNo) {
+		List<PostVo> pList = postDao.postViewCate(cateNo);
+		return pList;
+	}
 }

@@ -49,10 +49,13 @@ public class BlogService {
 	public BlogVo blogUpdate(String title, int userNo, MultipartFile file) {
 		String logoFile = "";
 		
-		FileUploadVo vo = fileUpload(file);
-		logoFile = vo.getSaveName();
-		System.out.println(logoFile);
-		
+		if(file.isEmpty()) {
+			logoFile = blogDao.selectOneBlog(userNo).getLogoFile();
+		}else {
+			FileUploadVo vo = fileUpload(file);
+			logoFile = vo.getSaveName();
+			System.out.println(logoFile);
+		}
 		BlogVo blogVo = new BlogVo();
 		blogVo.setBlogTitle(title);
 		blogVo.setUserNo(userNo);

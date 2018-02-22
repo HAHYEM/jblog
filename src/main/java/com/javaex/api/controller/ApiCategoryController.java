@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.javaex.service.CategoryService;
 import com.javaex.service.PostService;
 import com.javaex.vo.CategoryVo;
+import com.javaex.vo.PostVo;
 
 @Controller
 public class ApiCategoryController {
@@ -39,18 +40,17 @@ public class ApiCategoryController {
 	@ResponseBody
 	@RequestMapping(value = "/api/deletecate", method = RequestMethod.POST)
 	public boolean deleteCategory(@RequestParam("cateNo") int cateNo) {
-
 		boolean result = categoryService.deleteCategory(cateNo);
+		System.out.println("!!!!"+result);
 		return result;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/api/bmain", method=RequestMethod.POST)
-	public Map<String, Object>  blogMain(@RequestParam("id") String id
-									   , @RequestParam("cateName") String cateName){
-		Map<String, Object> cateMap = categoryService.blogMain(id, cateName);
-		return cateMap;
+	@RequestMapping(value="/category/view", method=RequestMethod.POST)
+	public List<PostVo> postViewCate(@RequestParam("cateNo") int cateNo) {
+		CategoryVo cateVo = categoryService.viewCate(cateNo);
+		List<PostVo> pList = postService.postViewCate(cateNo);
+		return pList;
 	}
-
 
 }

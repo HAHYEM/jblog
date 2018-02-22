@@ -22,7 +22,6 @@ public class PostDao {
 
 	public List<PostVo> writeCateList(int cateNo) {
 		List<PostVo> pList = sqlSession.selectList("post.writeCatePostListByCateNo", cateNo);
-		
 		return pList;
 	}
 
@@ -44,8 +43,14 @@ public class PostDao {
 	public List<PostVo> getPostList(int userNo) {
 		List<PostVo> pList =sqlSession.selectList("post.getPostListByUserNo", userNo);
 		System.out.println("메롱"+pList);
-		System.out.println(userNo);
-		
+		System.out.println(userNo);		
+		return pList;
+	}
+	
+	public List<PostVo> postViewCate(int cateNo) {
+		List<PostVo> pList =sqlSession.selectList("post.postViewCateByCateNo", cateNo);
+		System.out.println("메롱"+pList);
+		System.out.println(cateNo);		
 		return pList;
 	}
 	

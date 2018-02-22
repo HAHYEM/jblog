@@ -37,13 +37,15 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(@RequestParam("id") String id, @RequestParam("password") String password, HttpSession session) {
+	public String login(@RequestParam("id") String id
+					  , @RequestParam(value="password", required=false, defaultValue="") String password
+					  , HttpSession session) {
 		UserVo authUser = userService.login(id, password);
 		if (authUser != null) {
 			session.setAttribute("authUser", authUser);
-			return "main/index";
+			return "redirect:/";
 		} else {
-			return "redirect:/user/loginform?result=fail";
+			return "redirect:/user/login?result=fail";
 		}
 	}
 	

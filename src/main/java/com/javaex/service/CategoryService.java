@@ -45,13 +45,21 @@ public class CategoryService {
 		return cateVo;
 	}
 	public boolean deleteCategory(int cateNo) {
-		int count = categoryDao.deleteCategory(cateNo);
-		boolean result = false;
-		if(count == 1) {
-			result = true;
-		}
-		System.out.println(count + "개 카테고리 제거 완료");
+		//cateNo의 post갯수 확인 -> postCount에 넣어 
+		// postCount > 0 ---> result = false;
+		// 만약에 postCount < 0 ---> categoryDao.deleteCategory(cateNo);
+		// result = true;
 		
+		CategoryVo cateVo= categoryDao.selectCategoryByCateNo(cateNo);
+		int postCount = cateVo.getPostCount();
+		boolean result = false;
+		if(postCount > 0) {
+			result = false;
+		}else {
+			result = true;
+			int count = categoryDao.deleteCategory(cateNo);
+			System.out.println(count + "개 카테고리 제거 완료");
+		}
 		return result;
 	}
 
@@ -72,6 +80,11 @@ public class CategoryService {
 		cateMap.put("cateList", cateList);
 	
 		return cateMap;
+	}
+
+	public CategoryVo viewCate(int cateNo) {
+		CategoryVo cateVo = categoryDao.viewCate(cateNo);
+		return cateVo;
 	}
 
 }

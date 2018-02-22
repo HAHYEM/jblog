@@ -25,13 +25,13 @@ public class ApiPostController {
 		return pList;
 	}
 	@ResponseBody
-	@RequestMapping(value="/view", method=RequestMethod.POST)
+	@RequestMapping(value="/post/view", method=RequestMethod.POST)
 	public PostVo viewPost(@RequestParam("postNo") int postNo) {
 		PostVo postVo = postService.getPostVo(postNo);
 		return postVo;
 	}
 	@ResponseBody
-	@RequestMapping(value="/recentpost", method=RequestMethod.POST)
+	@RequestMapping(value="/post/recentpost", method=RequestMethod.POST)
 	public int recentPost(@RequestParam("cateNo") int cateNo) {
 		int postNo = postService.getRecentPost(cateNo);
 		return postNo;

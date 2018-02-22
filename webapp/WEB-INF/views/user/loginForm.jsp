@@ -19,12 +19,14 @@
       		
       		<label>패스워드</label> 
       		<input type="password" name="password">
-      		
-      		<p class="form-error">
-				<c:if test="${fail ne param.result}">
-					<P>로그인이 실패했습니다.<br>다시 입력해주세요</P>
-				</c:if>
-			</p>
+		      	<c:choose>
+		      		<c:when test="${param.result == false }">
+		      			<p class="form-error"><font color = "red">로그인이 실패했습니다.<br>아이디/패스워드를 확인해주세요</font></p>
+		      		</c:when>
+		      		<c:otherwise>
+		      			<p class="form-error"></p>
+		      		</c:otherwise>
+		      	</c:choose>
       		<input type="submit" value="로그인">
 		</form>
 		

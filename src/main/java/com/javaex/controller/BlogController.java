@@ -106,7 +106,7 @@ public class BlogController {
 		return "redirect:/" + loginId + "/admin/basic";
 	}
 	
-	@RequestMapping(value = "/admin/cate")
+	@RequestMapping(value = "/admin/category")
 	public String adminCate(@PathVariable("id") String id, 
 			HttpSession session,
 			Model model

@@ -55,6 +55,7 @@
 		
 	</div>
 </body>
+
 <script type="text/javascript">
 	var userNo = ${authUser.userNo}
 	console.log(userNo);
@@ -78,7 +79,7 @@
 		}
 	});
 }
-	
+	//카테고리 추가하는 버튼 클릭 시	
 	$("#btnPlus").on("click", function(){
 		var categoryVo = {
 				userNo : userNo,
@@ -108,8 +109,6 @@
 		$("[name=desc]").val("");	
 	}); 
 	
-
-
 		function render(categoryVo, updown) {
 
 			var str = "";
@@ -131,8 +130,9 @@
 				console.log("updown 오류");
 			}
 		};
-		
+		//삭제버튼 눌렀을 때 
 		$("#cateListArea").on("click", ".btnCateDel", function(){
+			
 			var cateNo = $(this).data("no")
 			console.log(cateNo);
  			$.ajax({
@@ -150,7 +150,8 @@
 						console.log("제거했음");
 						$("#ctgr"+cateNo).remove();
 					}else{
-						console.log("제거실패")
+						alert('삭제할 수 없음');
+						console.log("제거실패");
 							}
 				},
 				error : function(XHR, status, error) {

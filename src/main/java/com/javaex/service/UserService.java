@@ -34,9 +34,9 @@ public class UserService {
 	}
 		
 	public boolean idCheck(String id) {
+		UserVo getId = userDao.selectUser(id);
+		boolean result = true;
 		
-		boolean result;
-		String getId = userDao.getUser(id);
 		if(getId != null) {
 			result = false;
 		} else {
@@ -47,7 +47,6 @@ public class UserService {
 
 	public int getUserNo(String id) {
 		return userDao.getUserNo(id);
-		
 	}
 
 }
