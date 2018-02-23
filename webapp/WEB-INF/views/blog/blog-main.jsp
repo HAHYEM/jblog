@@ -28,11 +28,38 @@
 							<p>
 					</c:if>
 				</div>
+				<!-- 댓글 목록이 있을 경우에만 화면에 보여줌 -->
+				<c:if test="${sessionScope.commentList != null}">    
+       			 	<c:forEach var="comment" items="${requestScope.commentList }">
+						<!-- id, regDate -->
+						<td width="150">
+							<div>
+								${comment.id}<br>
+								<font size="2" color="lightgray">${comment.regDate}</font>
+							</div>
+						</td>
+						<!-- 본문내용 -->
+						<td width="550">
+							<div class="text-wrapper">
+								${comment.cmtContent}<br>
+							</div>
+						</td>
+						<!-- 버튼 -->
+						<td width="100">
+							<div id="reply-btn" style="text-align:center;">
+								<a href="#">답변</a><br>
+							<!-- 댓글 작성자만 수정, 삭제 가능하도록 -->	
+							<c:if test="${comment.id == sessionScope.sessionId }">
+								<a href="#">삭제</a>
+							</c:if>
+						</div>
+					</c:forEach>
+       			</c:if>
+				<!-- 로그인 했을 경우에만 댓글 작성가능 -->
+				<c:if test="">
+				</c:if>
+				
 				<ul class="blog-list">
-				<%-- 	<c:forEach items="${pList}" var="vo"> --%>
-				<%-- 	<li data-no="${vo.postNo}">${vo.postTitle} <span>${vo.regDate}</span></li> --%>
-						
-				<%-- 	</c:forEach>	 --%>
 				</ul>
 			</div>
 		</div>
@@ -41,7 +68,7 @@
 			<div class="blog-logo">
 				<img src="${pageContext.request.contextPath}/jblogupload/${url}">
 			</div>
-		</div>
+		</div>	
 		
 		<div id="navigation">
 			<h2>카테고리 </h2>

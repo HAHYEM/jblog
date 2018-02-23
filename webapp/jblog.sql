@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  파일이 생성됨 - 목요일-2월-22-2018   
+--  파일이 생성됨 - 금요일-2월-23-2018   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Table BLOG
@@ -36,8 +36,9 @@
   CREATE TABLE "JBLOG"."COMMENTS" 
    (	"CMTNO" NUMBER, 
 	"POSTNO" NUMBER, 
-	"CMTCONTENT" VARCHAR2(50 BYTE), 
-	"REGDATE" VARCHAR2(100 BYTE)
+	"USERNO" NUMBER, 
+	"CMTCONTENT" VARCHAR2(1000 BYTE), 
+	"REGDATE" DATE
    ) SEGMENT CREATION IMMEDIATE 
   PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
@@ -103,7 +104,7 @@
 --  DDL for Sequence SEQ_FILEUPLOAD_NO
 --------------------------------------------------------
 
-   CREATE SEQUENCE  "JBLOG"."SEQ_FILEUPLOAD_NO"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 81 CACHE 20 NOORDER  NOCYCLE ;
+   CREATE SEQUENCE  "JBLOG"."SEQ_FILEUPLOAD_NO"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 101 CACHE 20 NOORDER  NOCYCLE ;
 --------------------------------------------------------
 --  DDL for Sequence SEQ_POST_NO
 --------------------------------------------------------
@@ -125,7 +126,7 @@ Insert into JBLOG.BLOG (USERNO,BLOGTITLE,LOGOFILE) values (95,'dddd','1519029201
 Insert into JBLOG.BLOG (USERNO,BLOGTITLE,LOGOFILE) values (110,'asf','151902985830382f94be0-3f6b-4467-b6a8-425222a25bb5.jpg');
 Insert into JBLOG.BLOG (USERNO,BLOGTITLE,LOGOFILE) values (121,'스티치','1519123871036ad6f4486-c005-4d2a-894c-83e9b958bb08.png');
 Insert into JBLOG.BLOG (USERNO,BLOGTITLE,LOGOFILE) values (122,'2님의 블로그','spring-logo.jpg');
-Insert into JBLOG.BLOG (USERNO,BLOGTITLE,LOGOFILE) values (141,'하혬님의 블로그','spring-logo.jpg');
+Insert into JBLOG.BLOG (USERNO,BLOGTITLE,LOGOFILE) values (141,'하혬님의 블로그','1519345954499aeea70ba-939d-4f39-b280-41b2e242098a.jpg');
 Insert into JBLOG.BLOG (USERNO,BLOGTITLE,LOGOFILE) values (142,'이영호님의 블로그','1519174282079e977e19b-bb25-4f09-9817-62bc3e5eb642.jpg');
 Insert into JBLOG.BLOG (USERNO,BLOGTITLE,LOGOFILE) values (143,'이준영님의 블로그','1519174765891fe901fe2-9703-4d73-ac9a-a0ededdcd2a6.jpg');
 Insert into JBLOG.BLOG (USERNO,BLOGTITLE,LOGOFILE) values (144,'515151님의 블로그','spring-logo.jpg');
@@ -183,6 +184,7 @@ Insert into JBLOG.FILEUPLOAD ("no","orgName","saveName","exName","filePath","fil
 Insert into JBLOG.FILEUPLOAD ("no","orgName","saveName","exName","filePath","fileSize") values (61,'이승기.jpg','1519174282079e977e19b-bb25-4f09-9817-62bc3e5eb642.jpg','.jpg','D:\javaStudy\workspace\jblog\jblogupload\1519174282079e977e19b-bb25-4f09-9817-62bc3e5eb642.jpg','38960');
 Insert into JBLOG.FILEUPLOAD ("no","orgName","saveName","exName","filePath","fileSize") values (62,'준.jpg','151917444670758eeea13-79b0-4096-a466-589521982860.jpg','.jpg','D:\javaStudy\workspace\jblog\jblogupload\151917444670758eeea13-79b0-4096-a466-589521982860.jpg','142647');
 Insert into JBLOG.FILEUPLOAD ("no","orgName","saveName","exName","filePath","fileSize") values (63,'준.jpg','1519174765891fe901fe2-9703-4d73-ac9a-a0ededdcd2a6.jpg','.jpg','D:\javaStudy\workspace\jblog\jblogupload\1519174765891fe901fe2-9703-4d73-ac9a-a0ededdcd2a6.jpg','512381');
+Insert into JBLOG.FILEUPLOAD ("no","orgName","saveName","exName","filePath","fileSize") values (81,'준.jpg','1519345954499aeea70ba-939d-4f39-b280-41b2e242098a.jpg','.jpg','D:\javaStudy\workspace\jblog\jblogupload\1519345954499aeea70ba-939d-4f39-b280-41b2e242098a.jpg','512381');
 REM INSERTING into JBLOG.POST
 SET DEFINE OFF;
 Insert into JBLOG.POST (POSTNO,CATENO,POSTTITLE,POSTCONTENT,REGDATE) values (2,2,'끄아아앙','"빨리 끝났으면 좋겠다."',to_date('18/02/20','RR/MM/DD'));
@@ -265,6 +267,17 @@ Insert into JBLOG.USERS (USERNO,ID,USERNAME,PASSWORD,JOINDATE) values (110,'1111
   TABLESPACE "SYSTEM"  ENABLE;
   ALTER TABLE "JBLOG"."BLOG" MODIFY ("BLOGTITLE" NOT NULL ENABLE);
 --------------------------------------------------------
+--  Constraints for Table COMMENTS
+--------------------------------------------------------
+
+  ALTER TABLE "JBLOG"."COMMENTS" ADD PRIMARY KEY ("CMTNO")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "SYSTEM"  ENABLE;
+  ALTER TABLE "JBLOG"."COMMENTS" MODIFY ("REGDATE" NOT NULL ENABLE);
+  ALTER TABLE "JBLOG"."COMMENTS" MODIFY ("CMTCONTENT" NOT NULL ENABLE);
+--------------------------------------------------------
 --  Constraints for Table CATEGORY
 --------------------------------------------------------
 
@@ -275,22 +288,6 @@ Insert into JBLOG.USERS (USERNO,ID,USERNAME,PASSWORD,JOINDATE) values (110,'1111
   TABLESPACE "SYSTEM"  ENABLE;
   ALTER TABLE "JBLOG"."CATEGORY" MODIFY ("REGDATE" NOT NULL ENABLE);
   ALTER TABLE "JBLOG"."CATEGORY" MODIFY ("CATENAME" NOT NULL ENABLE);
---------------------------------------------------------
---  Constraints for Table COMMENTS
---------------------------------------------------------
-
-  ALTER TABLE "JBLOG"."COMMENTS" ADD UNIQUE ("CMTCONTENT")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM"  ENABLE;
-  ALTER TABLE "JBLOG"."COMMENTS" ADD PRIMARY KEY ("CMTNO")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM"  ENABLE;
-  ALTER TABLE "JBLOG"."COMMENTS" MODIFY ("REGDATE" NOT NULL ENABLE);
-  ALTER TABLE "JBLOG"."COMMENTS" MODIFY ("CMTCONTENT" NOT NULL ENABLE);
 --------------------------------------------------------
 --  Constraints for Table POST
 --------------------------------------------------------
@@ -318,8 +315,10 @@ Insert into JBLOG.USERS (USERNO,ID,USERNAME,PASSWORD,JOINDATE) values (110,'1111
 --  Ref Constraints for Table COMMENTS
 --------------------------------------------------------
 
-  ALTER TABLE "JBLOG"."COMMENTS" ADD CONSTRAINT "C_COMMENTS_FK" FOREIGN KEY ("POSTNO")
+  ALTER TABLE "JBLOG"."COMMENTS" ADD CONSTRAINT "C_COMMENTS_FK1" FOREIGN KEY ("POSTNO")
 	  REFERENCES "JBLOG"."POST" ("POSTNO") ENABLE;
+  ALTER TABLE "JBLOG"."COMMENTS" ADD CONSTRAINT "C_COMMENTS_FK2" FOREIGN KEY ("USERNO")
+	  REFERENCES "JBLOG"."USERS" ("USERNO") ENABLE;
 --------------------------------------------------------
 --  Ref Constraints for Table POST
 --------------------------------------------------------
